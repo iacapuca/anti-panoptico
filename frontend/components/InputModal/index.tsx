@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
 
 const InputModal = ({
   showModal,
@@ -6,6 +7,9 @@ const InputModal = ({
   location,
   address,
 }): JSX.Element => {
+  const { register, handleSubmit, watch, errors } = useForm();
+  const onSubmit = (data) => console.log(data);
+
   const modalRef = useRef();
 
   const closeModal = (e) => {
@@ -18,7 +22,6 @@ const InputModal = ({
     (e) => {
       if (e.key === "Escape" && showModal) {
         setShowModal(false);
-        console.log("I pressed");
       }
     },
     [setShowModal, showModal]
@@ -41,28 +44,34 @@ const InputModal = ({
             style={{
               width: "800px",
               height: "500px",
+              display: "flex",
+              alignItems: "center",
               boxShadow: "0 5px 16px rgba(0,0,0,0.2)",
               background: "#fff",
               color: "#000",
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
               position: "relative",
               zIndex: 11,
+              border: "red solid 2px",
             }}
           >
             <div className="modal-content p-8">
-              <form>
-                <label className="flex">
-                  Local:
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <label className="flex mb-4">
+                  Endereço:
                   <input
+                    className="ml-4"
                     type="text"
-                    name="location"
-                    value={`${address?.road}, ${address?.house_number}, ${address?.city} - ${address?.state}`}
+                    name="address"
+                    defaultValue={`${address?.road}, ${address?.house_number}, ${address?.city} - ${address?.state}`}
+                    ref={register({ required: true })}
                   />
+                  {errors.address && (
+                    <span>É necessário preencher o endereço</span>
+                  )}
                 </label>
-                <label>
+                <label className="flex mb-4">
                   Tipo de CCTV:
-                  <select>
+                  <select ref={register} name="type" className="ml-4">
                     <option value="">Nenhuma das opções</option>
                     <option value="anpr">ANPR</option>
                     <option value="dome">Domo</option>
@@ -72,33 +81,46 @@ const InputModal = ({
                     <option value="noturna">Noturna</option>
                   </select>
                 </label>
-                <label>
+                <label className="flex mb-4">
                   Ângulo visual:
-                  <input type="number" name="angle" min="0" max="360" />
+                  <input
+                    className="ml-4"
+                    type="number"
+                    name="angle"
+                    defaultValue="0"
+                    min="0"
+                    max="360"
+                    step="1"
+                    ref={register({ min: 0, max: 360 })}
+                  />
                 </label>
                 <div>
-                  <label>
+                  <label className="flex mb-4">
                     Filiação:
-                    <input
-                      type="radio"
-                      name="filiation"
-                      value="public"
-                      checked={true}
-                    />
-                    Pública
-                  </label>
-                  <label>
-                    <input type="radio" name="filiation" value="private" />
-                    Privada
+                    <label className="ml-4">
+                      <input
+                        name="filiation"
+                        type="radio"
+                        value="public"
+                        ref={register({ required: true })}
+                      />
+                      Pública
+                    </label>
+                    <label className="ml-4">
+                      <input
+                        name="filiation"
+                        type="radio"
+                        value="private"
+                        ref={register({ required: true })}
+                      />
+                      Privada
+                    </label>
                   </label>
                 </div>
                 <p>
                   Longitude:{location?.lng}, Latitude:{location?.lat}
                 </p>
-                <div>
-                  <button>Cancelar</button>
-                  <button>Enviar</button>
-                </div>
+                <input type="submit" />
               </form>
             </div>
             <div

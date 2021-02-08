@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import mapboxgl from "mapbox-gl";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -38,6 +39,12 @@ const Map = ({ setShowModal, setLocation, setAddress }): JSX.Element => {
       <div id="map" style={{ height: "100%", width: "100%" }} />
     </>
   );
+};
+
+Map.propTypes = {
+  setShowModal: PropTypes.func,
+  setLocation: PropTypes.func,
+  setAddress: PropTypes.func,
 };
 
 export default Map;

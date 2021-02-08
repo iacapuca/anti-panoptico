@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import Map from "../components/Map";
 import InputModal from "../components/InputModal";
 
@@ -16,18 +17,13 @@ const Home = (): JSX.Element => {
         address={address}
       />
       <div
-        className="h-screen w-screen"
+        className="min-h-screen"
         style={{
           display: "flex",
           color: "#fff",
         }}
       >
-        <div
-          className="sm:w-4/5 w-full"
-          style={{
-            backgroundColor: "palevioletred",
-          }}
-        >
+        <div className="sm:w-4/5 w-full">
           <Map
             setShowModal={setShowModal}
             setLocation={setLocation}
@@ -40,9 +36,9 @@ const Home = (): JSX.Element => {
             backgroundColor: "#434343",
           }}
         >
-          <div className="text-6xl mx-auto my-20">
+          <div className="text-6xl mx-auto my-20 p-2">
             <h1 style={{ fontFamily: "Major Mono Display" }}>Anti</h1>
-            <h1 style={{ fontFamily: "Major Mono Display" }}>pAnópico</h1>
+            <h1 style={{ fontFamily: "Major Mono Display" }}>pAnóptico</h1>
           </div>
           <div className="border-solid border-4 border-white" />
           <div className="mx-auto p-8 my-8">
@@ -64,7 +60,13 @@ const Home = (): JSX.Element => {
               pode mapear e visualizar câmeras de <strong>segurança</strong> em
               sua cidade, sejam estas de filiação pública ou privada
             </p>
-            <div className="w-full">LOGO</div>
+            <Image
+              src="/logo.png"
+              width={128}
+              height={128}
+              layout="responsive"
+              className="fill-current text-white"
+            />
           </div>
         </div>
       </div>
