@@ -1,15 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import mapboxgl from "mapbox-gl";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 const Map = ({ setShowModal, setLocation, setAddress }): JSX.Element => {
+  const [error, setError] = useState<string>();
+  const [mapLocation, setMapLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  }>({ latitude: 0, longitude: 0 });
+
   useEffect(() => {
+    if (!navigator.geolocation) {
+      setError("Geolocation is not supported.");
+      return;
+    }
+
+    const handleSuccess = (position) => {
+      const { latitude, longitude } = position.coords;
+      setMapLocation({
+        latitude,
+        longitude,
+      });
+    };
+
+    const handleError = (error) => {
+      setError(error.message);
+    };
+
+    navigator.geolocation.getCurrentPosition(handleSuccess, handleError);
+
     const map = new mapboxgl.Map({
       container: "map",
       style: "mapbox://styles/mapbox/dark-v10",
-      center: [-74.5, 40],
+      center: [mapLocation.longitude, mapLocation.latitude],
       zoom: 9,
     });
 
