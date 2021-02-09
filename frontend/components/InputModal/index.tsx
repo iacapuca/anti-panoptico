@@ -7,7 +7,7 @@ const InputModal = ({
   location,
   address,
 }): JSX.Element => {
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, watch, errors, clearErrors } = useForm();
   const onSubmit = (data) => console.log(data);
 
   const modalRef = useRef();
@@ -15,6 +15,7 @@ const InputModal = ({
   const closeModal = (e) => {
     if (modalRef.current === e.target) {
       setShowModal(false);
+      clearErrors();
     }
   };
 
@@ -22,6 +23,7 @@ const InputModal = ({
     (e) => {
       if (e.key === "Escape" && showModal) {
         setShowModal(false);
+        clearErrors();
       }
     },
     [setShowModal, showModal]
@@ -36,7 +38,7 @@ const InputModal = ({
     <>
       {showModal ? (
         <div
-          className="w-full h-full fixed flex justify-center items-center background--modal-transparent z-10"
+          className="w-full h-full fixed flex justify-center items-center bg-black bg-opacity-50 z-10"
           onClick={closeModal}
           ref={modalRef}
         >
@@ -51,27 +53,37 @@ const InputModal = ({
               color: "#000",
               position: "relative",
               zIndex: 11,
-              border: "red solid 2px",
             }}
           >
-            <div className="modal-content p-8">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <label className="flex mb-4">
-                  Endereço:
+            <div className="mx-auto">
+              <div>
+                <h1 className="font-bold text-gray-800 text-3xl flex-grow">
+                  Adicione uma câmera
+                </h1>
+              </div>
+              <div className="border-solid border-b border-gray-400 mb-4" />
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="grid grid-cols-1 gap-4"
+              >
+                <div>
+                  <label className="block font-bold">Endereço:</label>
                   <input
-                    className="ml-4"
+                    className="w-full"
                     type="text"
                     name="address"
                     defaultValue={`${address?.road}, ${address?.house_number}, ${address?.city} - ${address?.state}`}
                     ref={register({ required: true })}
                   />
                   {errors.address && (
-                    <span>É necessário preencher o endereço</span>
+                    <span className="text-red-600">
+                      É necessário preencher o endereço
+                    </span>
                   )}
-                </label>
-                <label className="flex mb-4">
+                </div>
+                <label className="block font-bold">
                   Tipo de CCTV:
-                  <select ref={register} name="type" className="ml-4">
+                  <select ref={register} name="type" className="w-full">
                     <option value="">Nenhuma das opções</option>
                     <option value="anpr">ANPR</option>
                     <option value="dome">Domo</option>
@@ -81,8 +93,8 @@ const InputModal = ({
                     <option value="noturna">Noturna</option>
                   </select>
                 </label>
-                <label className="flex mb-4">
-                  Ângulo visual:
+                <div className="flex items-center">
+                  <label className="block font-bold">Ângulo visual:</label>
                   <input
                     className="ml-4"
                     type="number"
@@ -93,10 +105,10 @@ const InputModal = ({
                     step="1"
                     ref={register({ min: 0, max: 360 })}
                   />
-                </label>
+                </div>
                 <div>
-                  <label className="flex mb-4">
-                    Filiação:
+                  <div className="flex">
+                    <label className="block font-bold">Filiação:</label>
                     <label className="ml-4">
                       <input
                         name="filiation"
@@ -115,18 +127,28 @@ const InputModal = ({
                       />
                       Privada
                     </label>
-                  </label>
+                  </div>
                 </div>
-                <p>
-                  Longitude:{location?.lng}, Latitude:{location?.lat}
-                </p>
+                <div>
+                  <p>
+                    <strong>Longitude:</strong>
+                    {location?.lng}
+                  </p>
+                  <p>
+                    <strong>Latitude:</strong>
+                    {location?.lat}
+                  </p>
+                </div>
                 <input type="submit" />
               </form>
             </div>
             <div
               className="modal-close-button"
               aria-label="Close modal"
-              onClick={() => setShowModal((prev) => !prev)}
+              onClick={() => {
+                setShowModal((prev) => !prev);
+                clearErrors();
+              }}
             >
               X
             </div>

@@ -17,22 +17,14 @@ const Home = (): JSX.Element => {
         location={location}
         address={address}
       />
-      <div
-        className="min-h-screen"
-        style={{
-          display: "flex",
-          color: "#fff",
-        }}
-      >
-        <div className="sm:w-4/5 w-full">
-          <Map
-            setShowModal={setShowModal}
-            setLocation={setLocation}
-            setAddress={setAddress}
-          />
-        </div>
-        <Sidebar />
+      <div className="sm:w-4/5 w-full">
+        <Map
+          setShowModal={setShowModal}
+          setLocation={setLocation}
+          setAddress={setAddress}
+        />
       </div>
+      <Sidebar />
     </>
   );
 };
