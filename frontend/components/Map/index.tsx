@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import mapboxgl from "mapbox-gl";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import MapboxLanguage from "@mapbox/mapbox-gl-language";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -9,9 +12,17 @@ const Map = ({ setShowModal, setLocation, setAddress }): JSX.Element => {
     const map = new mapboxgl.Map({
       container: "map",
       style: "mapbox://styles/mapbox/dark-v10",
-      center: [-74.5, 40],
+      center: [-46.62529, -23.533773],
       zoom: 9,
     });
+
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      placeholder: "Buscar",
+    });
+    map.addControl(geocoder);
+
+    map.addControl(new MapboxLanguage());
 
     map.addControl(
       new mapboxgl.GeolocateControl({
