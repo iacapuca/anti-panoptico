@@ -1,9 +1,13 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Sobre = () => {
   return (
     <div className="mx-auto max-w-5xl px-8 mt-20">
+      <Link href="/">
+        <a>{"<-"}</a>
+      </Link>
       <div className="title text-white my-4">
         <h2>ANTI PANÓPTICO - Sobrevivência num mundo pós-privacidade</h2>
         <span>--</span>
